@@ -60,8 +60,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Mathias\Documents\GitHub\luaPlus\LuaPlus\Src;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Mathias\Documents\GitHub\luaPlus\LuaPlus\build2010\bin.vs2010.win32;$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(BLOCO_HOME)\luaPlus\LuaPlus\Src;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(BLOCO_HOME)\luaPlus\LuaPlus\build2010\bin.vs2010.win32;$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
