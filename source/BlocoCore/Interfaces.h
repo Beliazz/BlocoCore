@@ -218,6 +218,7 @@ typedef std::list<Vec> BLOCOCORE_API VecList;
 class btRigidBody;
 class btCollisionShape;
 class btCompoundShape;
+class CKinematicController;
 class BLOCOCORE_API IGamePhysics
 {
 public:
@@ -242,6 +243,7 @@ public:
 	virtual void VAddCompoundShape(btCompoundShape* shape, IActor *actor, float specificGravity, enum PhysicsMaterial mat) = 0;
 	virtual void VRemoveActor(ActorId id)=0;
 	virtual Vec  VRayCast( Vec start, Vec end, bool& hit ) =0;
+	virtual void VAddKinematicController(shared_ptr<CKinematicController> kinematicController, IActor *actor, float specificGravity, enum PhysicsMaterial mat) = 0;
 
 	// Debugging
 	virtual void VRenderDiagnostics(IScene *pScene) = 0;
