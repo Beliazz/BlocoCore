@@ -247,6 +247,7 @@ public:
 
 	// Debugging
 	virtual void VRenderDiagnostics(IScene *pScene) = 0;
+	virtual void DebugDrawWorld(bool value) {};
 	virtual void VSetDebugMode( int mode ) {};
 
 	// Physics world modifiers
@@ -262,6 +263,16 @@ public:
 	virtual void VSetVelocity(ActorId actorId, Vec vel) = 0;
 	virtual void VTranslate(ActorId actorId, Vec vec) = 0;
 	virtual void VStaticActor( ActorId actorId ) = 0;
+
+	virtual int GetNumKinematicController()		 { return 0; }
+	virtual int GetNumPhysicActor()				 { return 0; }
+	virtual int GetNumPhysicCompoundActor()		 { return 0; }
+	virtual int GetNumPhysicCompoundChildActor() { return 0; }
+
+	virtual float GetStepSimulationTime()		{ return 0.0f; }
+	virtual float GetSyncVisualSceneTime()		{ return 0.0f; }
+	virtual float GetKinematicControllerTime()	{ return 0.0f; }
+	virtual float GetDebugDrawWorldTime()		{ return 0.0f; }
 
 	virtual ~IGamePhysics() { };
 };
