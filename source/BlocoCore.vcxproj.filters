@@ -51,13 +51,13 @@
     <ClInclude Include="LuaStateManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Templates.h">
+    <ClInclude Include="BlocoCore.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Vec.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="BlocoCore.h">
+    <ClInclude Include="ToString.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

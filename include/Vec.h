@@ -1,12 +1,21 @@
-#ifndef Geometry_h__
-#define Geometry_h__
+#ifndef VectorMath_h__
+#define VectorMath_h__
 
-#include "BlocoCore.h"
+#include <xnamath.h>
+#include <xnamathmatrix.inl>
+#include <xnamathvector.inl>
+#include <xnamathmisc.inl>
+
+#include <string>
+#include <sstream>
+
+using namespace std;
+
 
 //////////////////////////////////////////////////////////////////////////
 // Matrix 4x4
 //////////////////////////////////////////////////////////////////////////
-class BLOCOCORE_API Mat
+class Mat
 {
 private:
 	XMFLOAT4X4 m_storage;
@@ -119,7 +128,7 @@ public:
 // multiply operators are overloaded for transformations with matrices
 // and quaternions
 //////////////////////////////////////////////////////////////////////////
-class BLOCOCORE_API Vec
+class Vec
 {
 private:
 	XMFLOAT4 m_storage;
@@ -129,7 +138,17 @@ public:
 	Vec(float x, float y, float z)			{m_storage = XMFLOAT4(x, y, z, 0.0f);}
 	Vec(float x, float y)					{m_storage = XMFLOAT4(x, y, 0.0f, 0.0f);}
 	Vec(std::istream& stream)				{stream >> m_storage.x >> m_storage.y >> m_storage.z;}
+	Vec(const char* str)	
+	{
+		stringstream stream(str);
+		float x,y,z;
 
+		stream >> x;
+		stream >> y;
+		stream >> z;
+
+		m_storage = XMFLOAT4(x, y, z, 0.0f);
+	}
 	Vec(double x, double y, double z, double w) {m_storage = XMFLOAT4((float)x, (float)y, (float)z, (float)w);}
 	Vec(double x, double y, double z)			{m_storage = XMFLOAT4((float)x, (float)y, (float)z, 0.0f);}
 	Vec(double x, double y)						{m_storage = XMFLOAT4((float)x, (float)y, 0.0f, 0.0f);}
@@ -411,7 +430,7 @@ public:
 // use overloaded operators only for vectors, not for planes, 
 // quaternions or colors. For this classes use the appropriate functions
 ///////////////////////////////////////////////////////////////////////
-typedef Vec BLOCOCORE_API Quat;
+typedef Vec Quat;
 
 //////////////////////////////////////////////////////////////////////////
 // Plane
@@ -423,7 +442,7 @@ typedef Vec BLOCOCORE_API Quat;
 // use overloaded operators only for vectors, not for planes, 
 // quaternions or colors. For this classes use the appropriate functions
 //////////////////////////////////////////////////////////////////////////
-typedef Vec BLOCOCORE_API Plane;
+typedef Vec Plane;
 
 //////////////////////////////////////////////////////////////////////////
 // Color
@@ -458,136 +477,136 @@ typedef Vec BLOCOCORE_API Plane;
 // use overloaded operators only for vectors, not for planes, 
 // quaternions or colors. For this classes use the appropriate functions
 //////////////////////////////////////////////////////////////////////////
-typedef Vec BLOCOCORE_API Col;
+typedef Vec  Col;
 
 //////////////////////////////////////////////////////////////////////////
 // operators
 //////////////////////////////////////////////////////////////////////////
-inline Vec BLOCOCORE_API operator + (Vec& lhs, Vec& rhs)
+inline Vec  operator + (Vec& lhs, Vec& rhs)
 {
 	return Vec(XMVectorAdd(lhs.Get(), rhs.Get()));
 }
-inline Vec BLOCOCORE_API operator + (Vec& lhs, XMFLOAT4& rhs)
+inline Vec  operator + (Vec& lhs, XMFLOAT4& rhs)
 {
 	return Vec(XMVectorAdd(lhs.Get(), XMLoadFloat4(&rhs)));
 }
-inline Vec BLOCOCORE_API operator + (XMFLOAT4& lhs, Vec& rhs)
+inline Vec  operator + (XMFLOAT4& lhs, Vec& rhs)
 {
 	return Vec(XMVectorAdd(rhs.Get(), XMLoadFloat4(&lhs)));
 }
-inline Vec BLOCOCORE_API operator + (Vec& lhs, FXMVECTOR rhs)
+inline Vec  operator + (Vec& lhs, FXMVECTOR rhs)
 {
 	return Vec(XMVectorAdd(lhs.Get(), rhs));
 }
-inline Vec BLOCOCORE_API operator + (FXMVECTOR rhs, Vec& lhs)
+inline Vec  operator + (FXMVECTOR rhs, Vec& lhs)
 {
 	return Vec(XMVectorAdd(lhs.Get(), rhs));
 }
 
-inline Vec BLOCOCORE_API operator - (Vec& lhs, Vec& rhs)
+inline Vec  operator - (Vec& lhs, Vec& rhs)
 {
 	return Vec(XMVectorSubtract(lhs.Get(), rhs.Get()));
 }
-inline Vec BLOCOCORE_API operator - (Vec& lhs, XMFLOAT4& rhs)
+inline Vec  operator - (Vec& lhs, XMFLOAT4& rhs)
 {
 	return Vec(XMVectorSubtract(lhs.Get(), XMLoadFloat4(&rhs)));
 }
-inline Vec BLOCOCORE_API operator - (XMFLOAT4& lhs, Vec& rhs)
+inline Vec  operator - (XMFLOAT4& lhs, Vec& rhs)
 {
 	return Vec(XMVectorSubtract(rhs.Get(), XMLoadFloat4(&lhs)));
 }
-inline Vec BLOCOCORE_API operator - (Vec& lhs, FXMVECTOR rhs)
+inline Vec  operator - (Vec& lhs, FXMVECTOR rhs)
 {
 	return Vec(XMVectorSubtract(lhs.Get(), rhs));
 }
-inline Vec BLOCOCORE_API operator - (FXMVECTOR lhs , Vec& rhs)
+inline Vec  operator - (FXMVECTOR lhs , Vec& rhs)
 {
 	return Vec(XMVectorSubtract(lhs, rhs.Get()));
 }
 
-inline Vec BLOCOCORE_API operator * (Vec& lhs, Vec& rhs)
+inline Vec  operator * (Vec& lhs, Vec& rhs)
 {
 	return Vec(XMVectorMultiply(lhs.Get(), rhs.Get()));
 }
-inline Vec BLOCOCORE_API operator * (Vec& lhs, XMFLOAT4& rhs)
+inline Vec  operator * (Vec& lhs, XMFLOAT4& rhs)
 {
 	return Vec(XMVectorMultiply(lhs.Get(), XMLoadFloat4(&rhs)));
 }
-inline Vec BLOCOCORE_API operator * (XMFLOAT4& lhs, Vec& rhs)
+inline Vec  operator * (XMFLOAT4& lhs, Vec& rhs)
 {
 	return Vec(XMVectorMultiply(rhs.Get(), XMLoadFloat4(&lhs)));
 }
-inline Vec BLOCOCORE_API operator * (Vec& lhs, Mat& rhs)
+inline Vec  operator * (Vec& lhs, Mat& rhs)
 {
 	return Vec(XMVector3Transform(lhs.Get(), rhs.Get()));
 }
-inline Vec BLOCOCORE_API operator * (Vec& lhs, XMFLOAT4X4& rhs)
+inline Vec  operator * (Vec& lhs, XMFLOAT4X4& rhs)
 {
 	return Vec(XMVector4Transform(lhs, XMLoadFloat4x4(&rhs)));
 }
-inline Vec BLOCOCORE_API operator * (Mat& lhs, Vec& rhs)
+inline Vec  operator * (Mat& lhs, Vec& rhs)
 {
 	return Vec(XMVector4Transform(rhs.Get(), lhs.Get()));
 }
-inline Vec BLOCOCORE_API operator * (XMFLOAT4X4& lhs, Vec& rhs )
+inline Vec  operator * (XMFLOAT4X4& lhs, Vec& rhs )
 {
 	return Vec(XMVector4Transform(rhs, XMLoadFloat4x4(&lhs)));
 }
-inline Vec BLOCOCORE_API operator * (FXMVECTOR lhs, Vec& rhs)
+inline Vec  operator * (FXMVECTOR lhs, Vec& rhs)
 {
 	return Vec(XMVectorMultiply(rhs.Get(), lhs));
 }
-inline Vec BLOCOCORE_API operator * (Vec& lhs, FXMVECTOR rhs)
+inline Vec  operator * (Vec& lhs, FXMVECTOR rhs)
 {
 	return Vec(XMVectorMultiply(lhs.Get(), rhs));
 }
-inline Vec BLOCOCORE_API operator * (Vec& lhs, CXMMATRIX rhs)
+inline Vec  operator * (Vec& lhs, CXMMATRIX rhs)
 {
 	return Vec(XMVector4Transform(lhs.Get(), rhs));
 }
-inline Vec BLOCOCORE_API operator * (CXMMATRIX lhs, Vec& rhs)
+inline Vec  operator * (CXMMATRIX lhs, Vec& rhs)
 {
 	return Vec(XMVector4Transform(rhs.Get(), lhs));
 }
 
-inline Vec BLOCOCORE_API operator / (Vec& lhs, Vec& rhs)
+inline Vec  operator / (Vec& lhs, Vec& rhs)
 {
 	return Vec(XMVectorDivide(lhs.Get(), rhs.Get()));
 }
-inline Vec BLOCOCORE_API operator / (Vec& lhs, XMFLOAT4& rhs)
+inline Vec  operator / (Vec& lhs, XMFLOAT4& rhs)
 {
 	return Vec(XMVectorDivide(lhs.Get(), XMLoadFloat4(&rhs)));
 }
-inline Vec BLOCOCORE_API operator / (XMFLOAT4& lhs, Vec& rhs)
+inline Vec  operator / (XMFLOAT4& lhs, Vec& rhs)
 {
 	return Vec(XMVectorDivide(rhs.Get(), XMLoadFloat4(&lhs)));
 }
-inline Vec BLOCOCORE_API operator / (Vec& lhs, FXMVECTOR rhs)
+inline Vec  operator / (Vec& lhs, FXMVECTOR rhs)
 {
 	return Vec(XMVectorDivide(lhs.Get(), rhs));
 }
-inline Vec BLOCOCORE_API operator / (FXMVECTOR lhs, Vec& rhs)
+inline Vec  operator / (FXMVECTOR lhs, Vec& rhs)
 {
 	return Vec(XMVectorDivide(rhs.Get(), lhs));
 }
 
-inline Mat BLOCOCORE_API operator * (Mat& lhs, Mat& rhs)
+inline Mat  operator * (Mat& lhs, Mat& rhs)
 {
 	return Mat(XMMatrixMultiply(lhs.Get(), rhs.Get()));
 }
-inline Mat BLOCOCORE_API operator * (Mat& lhs, XMFLOAT4X4& rhs)
+inline Mat  operator * (Mat& lhs, XMFLOAT4X4& rhs)
 {
 	return Mat(XMMatrixMultiply(lhs.Get(), XMLoadFloat4x4(&rhs)));
 }
-inline Mat BLOCOCORE_API operator * (XMFLOAT4X4& lhs, Mat& rhs)
+inline Mat  operator * (XMFLOAT4X4& lhs, Mat& rhs)
 {
 	return Mat(XMMatrixMultiply(rhs.Get(), XMLoadFloat4x4(&lhs)));
 }
-inline Mat BLOCOCORE_API operator * (CXMMATRIX lhs, Mat& rhs)
+inline Mat  operator * (CXMMATRIX lhs, Mat& rhs)
 {
 	return Mat(XMMatrixMultiply(rhs.Get(), lhs));
 }
-inline Mat BLOCOCORE_API operator * (Mat& lhs, CXMMATRIX rhs)
+inline Mat  operator * (Mat& lhs, CXMMATRIX rhs)
 {
 	return Mat(XMMatrixMultiply(lhs.Get(), rhs));
 }
@@ -596,57 +615,57 @@ inline Mat BLOCOCORE_API operator * (Mat& lhs, CXMMATRIX rhs)
 // Math Functions
 //////////////////////////////////////////////////////////////////////////
 // Vector
-inline Vec BLOCOCORE_API VecAddAngle(Vec& vec1, Vec& vec2)									{return Vec(XMVectorAddAngles(vec1.Get(), vec2.Get()));}
-inline Vec BLOCOCORE_API VecSlerp(Vec& vec1, Vec& vec2, float t)								{return Vec(XMVectorLerp(vec1, vec2, t));}
+inline Vec  VecAddAngle(Vec& vec1, Vec& vec2)									{return Vec(XMVectorAddAngles(vec1.Get(), vec2.Get()));}
+inline Vec  VecSlerp(Vec& vec1, Vec& vec2, float t)								{return Vec(XMVectorLerp(vec1, vec2, t));}
 
-inline Vec BLOCOCORE_API Vec2Cross(Vec& vec1, Vec& vec2)										{return Vec(XMVector2Cross(vec1.Get(), vec2.Get()));}
-inline Vec BLOCOCORE_API Vec2Normalize(Vec& vec)												{return Vec(XMVector2Normalize(vec.Get()));}
-inline Vec BLOCOCORE_API Vec2NormalizeEst(Vec& vec)											{return Vec(XMVector2NormalizeEst(vec.Get()));}
-inline Vec BLOCOCORE_API Vec2Length(Vec& vec)													{return Vec(XMVector2Length(vec.Get()));}
-inline Vec BLOCOCORE_API Vec2LengthEst(Vec& vec)												{return Vec(XMVector2LengthEst(vec.Get()));}
-inline Vec BLOCOCORE_API Vec2LengthSq(Vec& vec)												{return Vec(XMVector2LengthSq(vec.Get()));}
-inline Vec BLOCOCORE_API Vec2Dot(Vec& vec1, Vec& vec2)										{return Vec(XMVector2Dot(vec1, vec2));}
-inline Vec BLOCOCORE_API Vec2Transform(Vec& vec, Mat& mat)									{return Vec(XMVector2Transform(vec.Get(), mat.Get()));}
-inline Vec BLOCOCORE_API Vec2Transform(Vec& vec, Quat& quat)									{return Vec(XMVector2Transform(vec.Get(), XMMatrixRotationQuaternion(quat.Get())));}
+inline Vec  Vec2Cross(Vec& vec1, Vec& vec2)										{return Vec(XMVector2Cross(vec1.Get(), vec2.Get()));}
+inline Vec  Vec2Normalize(Vec& vec)												{return Vec(XMVector2Normalize(vec.Get()));}
+inline Vec  Vec2NormalizeEst(Vec& vec)											{return Vec(XMVector2NormalizeEst(vec.Get()));}
+inline Vec  Vec2Length(Vec& vec)													{return Vec(XMVector2Length(vec.Get()));}
+inline Vec  Vec2LengthEst(Vec& vec)												{return Vec(XMVector2LengthEst(vec.Get()));}
+inline Vec  Vec2LengthSq(Vec& vec)												{return Vec(XMVector2LengthSq(vec.Get()));}
+inline Vec  Vec2Dot(Vec& vec1, Vec& vec2)										{return Vec(XMVector2Dot(vec1, vec2));}
+inline Vec  Vec2Transform(Vec& vec, Mat& mat)									{return Vec(XMVector2Transform(vec.Get(), mat.Get()));}
+inline Vec  Vec2Transform(Vec& vec, Quat& quat)									{return Vec(XMVector2Transform(vec.Get(), XMMatrixRotationQuaternion(quat.Get())));}
 
-inline Vec BLOCOCORE_API VecCross(Vec& vec1, Vec& vec2)										{return Vec(XMVector3Cross(vec1.Get(), vec2.Get()));}
-inline Vec BLOCOCORE_API VecNormalize(Vec& vec)												{return Vec(XMVector3Normalize(vec.Get()));}
-inline Vec BLOCOCORE_API VecNormalizeEst(Vec& vec)											{return Vec(XMVector3NormalizeEst(vec.Get()));}
-inline Vec BLOCOCORE_API VecLength(Vec& vec)													{return Vec(XMVector3Length(vec.Get()));}
-inline Vec BLOCOCORE_API VecLengthEst(Vec& vec)												{return Vec(XMVector3LengthEst(vec.Get()));}
-inline Vec BLOCOCORE_API VecLengthSq(Vec& vec)												{return Vec(XMVector3LengthSq(vec.Get()));}
-inline Vec BLOCOCORE_API VecDot(Vec& vec1, Vec& vec2)										{return Vec(XMVector3Dot(vec1, vec2));}
-inline Vec BLOCOCORE_API VecTransform(Vec& vec, Mat& mat)									{return Vec(XMVector3Transform(vec.Get(), mat.Get()));}
-inline Vec BLOCOCORE_API VecTransform(Vec& vec, Quat& quat)									{return Vec(XMVector3Transform(vec.Get(), XMMatrixRotationQuaternion(quat.Get())));}
+inline Vec  VecCross(Vec& vec1, Vec& vec2)										{return Vec(XMVector3Cross(vec1.Get(), vec2.Get()));}
+inline Vec  VecNormalize(Vec& vec)												{return Vec(XMVector3Normalize(vec.Get()));}
+inline Vec  VecNormalizeEst(Vec& vec)											{return Vec(XMVector3NormalizeEst(vec.Get()));}
+inline Vec  VecLength(Vec& vec)													{return Vec(XMVector3Length(vec.Get()));}
+inline Vec  VecLengthEst(Vec& vec)												{return Vec(XMVector3LengthEst(vec.Get()));}
+inline Vec  VecLengthSq(Vec& vec)												{return Vec(XMVector3LengthSq(vec.Get()));}
+inline Vec  VecDot(Vec& vec1, Vec& vec2)										{return Vec(XMVector3Dot(vec1, vec2));}
+inline Vec  VecTransform(Vec& vec, Mat& mat)									{return Vec(XMVector3Transform(vec.Get(), mat.Get()));}
+inline Vec  VecTransform(Vec& vec, Quat& quat)									{return Vec(XMVector3Transform(vec.Get(), XMMatrixRotationQuaternion(quat.Get())));}
 
-inline Vec BLOCOCORE_API Vec4Normalize(Vec& vec)												{return Vec(XMVector4Normalize(vec.Get()));}
-inline Vec BLOCOCORE_API Vec4NormalizeEst(Vec& vec)											{return Vec(XMVector4NormalizeEst(vec.Get()));}
-inline Vec BLOCOCORE_API Vec4Length(Vec& vec)													{return Vec(XMVector4Length(vec.Get()));}
-inline Vec BLOCOCORE_API Vec4LengthEst(Vec& vec)												{return Vec(XMVector4LengthEst(vec.Get()));}
-inline Vec BLOCOCORE_API Vec4LengthSq(Vec& vec)												{return Vec(XMVector4LengthSq(vec.Get()));}
-inline Vec BLOCOCORE_API Vec4Dot(Vec& vec1, Vec& vec2)										{return Vec(XMVector4Dot(vec1, vec2));}
-inline Vec BLOCOCORE_API Vec4Transform(Vec& vec, Mat& mat)									{return Vec(XMVector4Transform(vec.Get(), mat.Get()));}
-inline Vec BLOCOCORE_API Vec4Transform(Vec& vec, Quat& quat)									{return Vec(XMVector4Transform(vec.Get(), XMMatrixRotationQuaternion(quat.Get())));}
+inline Vec  Vec4Normalize(Vec& vec)												{return Vec(XMVector4Normalize(vec.Get()));}
+inline Vec  Vec4NormalizeEst(Vec& vec)											{return Vec(XMVector4NormalizeEst(vec.Get()));}
+inline Vec  Vec4Length(Vec& vec)													{return Vec(XMVector4Length(vec.Get()));}
+inline Vec  Vec4LengthEst(Vec& vec)												{return Vec(XMVector4LengthEst(vec.Get()));}
+inline Vec  Vec4LengthSq(Vec& vec)												{return Vec(XMVector4LengthSq(vec.Get()));}
+inline Vec  Vec4Dot(Vec& vec1, Vec& vec2)										{return Vec(XMVector4Dot(vec1, vec2));}
+inline Vec  Vec4Transform(Vec& vec, Mat& mat)									{return Vec(XMVector4Transform(vec.Get(), mat.Get()));}
+inline Vec  Vec4Transform(Vec& vec, Quat& quat)									{return Vec(XMVector4Transform(vec.Get(), XMMatrixRotationQuaternion(quat.Get())));}
 
 // Matrix
-inline Mat BLOCOCORE_API MatTranslation(float x, float y, float z)							{return Mat(XMMatrixTranslation(x, y, z));}
-inline Mat BLOCOCORE_API MatTranslation(Vec& offset)											{return Mat(XMMatrixTranslationFromVector(offset.Get()));}
-inline Mat BLOCOCORE_API MatRotation(float x, float y, float z)								{return Mat(XMMatrixRotationRollPitchYaw(x, y, z));}
-inline Mat BLOCOCORE_API MatRotation(Vec& offset)												{return Mat(XMMatrixRotationRollPitchYawFromVector(offset.Get()));}
-inline Mat BLOCOCORE_API MatRotationQuat(Quat& offset)										{return Mat(XMMatrixRotationQuaternion(offset.Get()));}
-inline Mat BLOCOCORE_API MatRotationAxis(Vec& rotAxis, float angle)							{return Mat(XMMatrixRotationAxis(rotAxis.Get(), angle));}
-inline Mat BLOCOCORE_API MatRotationNormalAxis(Vec& normalAxis, float angle)					{return Mat(XMMatrixRotationNormal(normalAxis, angle));}
-inline Mat BLOCOCORE_API MatRotationYawPitchRoll(float yaw, float pitch, float roll)			{return Mat(XMMatrixRotationRollPitchYaw(pitch, yaw, roll));}
-inline Mat BLOCOCORE_API MatRotationYawPitchRoll(Vec& v)										{return Mat(XMMatrixRotationRollPitchYawFromVector(v));}
-inline Mat BLOCOCORE_API MatScaling(Vec& offset)												{return Mat(XMMatrixScalingFromVector(offset.Get()));}
-inline Mat BLOCOCORE_API MatCamera(Vec& pos, Vec& lookAt, Vec& up)							{return Mat(XMMatrixLookAtLH(pos.Get(), lookAt.Get(), up.Get()));}
-inline Mat BLOCOCORE_API MatProjection(float fov, float fAspect, float fNear, float fFar)		{return Mat(XMMatrixPerspectiveFovLH(fov, fAspect, fNear, fFar));}
-inline Mat BLOCOCORE_API MatIdentity()														{return Mat(XMMatrixIdentity());}
-inline Mat BLOCOCORE_API MatTranspose(Mat& mat)												{return Mat(XMMatrixTranspose(mat.Get()));}
-inline Vec BLOCOCORE_API MatDeterminant(Mat& mat)												{return Vec(XMMatrixDeterminant(mat.Get()));}
-inline BOOL BLOCOCORE_API MatIsIdentity(Mat& mat)												{return XMMatrixIsIdentity(mat.Get());}
-inline Vec  BLOCOCORE_API MatXForm(Mat& mat)													{Vec vec; return Vec4Transform(vec, mat);}	
-inline bool BLOCOCORE_API MatDecompose(Vec* pScale, Quat* pRot, Vec* pTrans, Mat& mat)
+inline Mat  MatTranslation(float x, float y, float z)							{return Mat(XMMatrixTranslation(x, y, z));}
+inline Mat  MatTranslation(Vec& offset)											{return Mat(XMMatrixTranslationFromVector(offset.Get()));}
+inline Mat  MatRotation(float x, float y, float z)								{return Mat(XMMatrixRotationRollPitchYaw(x, y, z));}
+inline Mat  MatRotation(Vec& offset)												{return Mat(XMMatrixRotationRollPitchYawFromVector(offset.Get()));}
+inline Mat  MatRotationQuat(Quat& offset)										{return Mat(XMMatrixRotationQuaternion(offset.Get()));}
+inline Mat  MatRotationAxis(Vec& rotAxis, float angle)							{return Mat(XMMatrixRotationAxis(rotAxis.Get(), angle));}
+inline Mat  MatRotationNormalAxis(Vec& normalAxis, float angle)					{return Mat(XMMatrixRotationNormal(normalAxis, angle));}
+inline Mat  MatRotationYawPitchRoll(float yaw, float pitch, float roll)			{return Mat(XMMatrixRotationRollPitchYaw(pitch, yaw, roll));}
+inline Mat  MatRotationYawPitchRoll(Vec& v)										{return Mat(XMMatrixRotationRollPitchYawFromVector(v));}
+inline Mat  MatScaling(Vec& offset)												{return Mat(XMMatrixScalingFromVector(offset.Get()));}
+inline Mat  MatCamera(Vec& pos, Vec& lookAt, Vec& up)							{return Mat(XMMatrixLookAtLH(pos.Get(), lookAt.Get(), up.Get()));}
+inline Mat  MatProjection(float fov, float fAspect, float fNear, float fFar)		{return Mat(XMMatrixPerspectiveFovLH(fov, fAspect, fNear, fFar));}
+inline Mat  MatIdentity()														{return Mat(XMMatrixIdentity());}
+inline Mat  MatTranspose(Mat& mat)												{return Mat(XMMatrixTranspose(mat.Get()));}
+inline Vec  MatDeterminant(Mat& mat)												{return Vec(XMMatrixDeterminant(mat.Get()));}
+inline BOOL  MatIsIdentity(Mat& mat)												{return XMMatrixIsIdentity(mat.Get());}
+inline Vec   MatXForm(Mat& mat)													{Vec vec; return Vec4Transform(vec, mat);}	
+inline bool  MatDecompose(Vec* pScale, Quat* pRot, Vec* pTrans, Mat& mat)
 {
 	XMVECTOR scale(pTrans->Get());
 	XMVECTOR rot(pRot->Get());
@@ -654,23 +673,23 @@ inline bool BLOCOCORE_API MatDecompose(Vec* pScale, Quat* pRot, Vec* pTrans, Mat
 
 	if(XMMatrixDecompose(&scale, &rot, &trans, mat.Get()))
 	{
-		pScale = DEBUG_CLIENTBLOCK Vec(scale);
-		pRot = DEBUG_CLIENTBLOCK Vec(rot);
-		pTrans = DEBUG_CLIENTBLOCK Vec(trans);
+		pScale = new Vec(scale);
+		pRot = new Vec(rot);
+		pTrans = new Vec(trans);
 
 		return true;
 	}
 
 	return false;
 }
-inline Mat BLOCOCORE_API MatInverse(Mat& mat, Vec* determinant)
+inline Mat  MatInverse(Mat& mat, Vec* determinant)
 { 
 	XMVECTOR det(determinant->Get()); 
 	Mat out(XMMatrixInverse(&det, mat.Get()));
 	*determinant = Vec(det);
 	return out;
 }
-inline Mat BLOCOCORE_API MatSetPosition(Mat& mat, Vec& pos)										
+inline Mat  MatSetPosition(Mat& mat, Vec& pos)										
 { 
 	FLOAT* arr = mat.GetArray(); 
 	arr[12] = pos.GetX();
@@ -680,7 +699,7 @@ inline Mat BLOCOCORE_API MatSetPosition(Mat& mat, Vec& pos)
 		
 	return Mat(arr);
 }
-inline Vec BLOCOCORE_API MatGetPosition(Mat& mat)
+inline Vec  MatGetPosition(Mat& mat)
 {
 	return Vec(mat.GetArray()[ 12],
 			   mat.GetArray()[ 13],
@@ -689,29 +708,29 @@ inline Vec BLOCOCORE_API MatGetPosition(Mat& mat)
 }
 
 // Quaternion
-inline Quat BLOCOCORE_API QuatRotation(float x, float y, float z)								{return Quat(XMQuaternionRotationRollPitchYaw(x, y, z));}
-inline Quat BLOCOCORE_API QuatRotation(Vec& offset)											{return Quat(XMQuaternionRotationRollPitchYawFromVector(offset));}
-inline Quat BLOCOCORE_API QuatRotationAxis(Vec& rotAxis, float angle)							{return Quat(XMQuaternionRotationAxis(rotAxis.Get(), angle));}
-inline Quat BLOCOCORE_API QuatRotationNormalAxis(Vec& normalAxis, float angle)				{return Quat(XMQuaternionRotationNormal(normalAxis, angle));}
-inline Quat BLOCOCORE_API QuatRotationMatrix(Mat& mat)										{return Quat(XMQuaternionRotationMatrix(mat.Get()));}
-inline Quat BLOCOCORE_API QuatNormalize(Quat& quat)											{return Quat(XMQuaternionNormalize(quat.Get()));}
-inline Quat BLOCOCORE_API QuatNormalizeEst(Quat& quat)										{return Quat(XMQuaternionNormalizeEst(quat.Get()));}
-inline Quat BLOCOCORE_API QuatSlerp(Quat& quat1, Quat& quat2, float t)						{return Quat(XMQuaternionSlerp(quat1, quat2, t));}
-inline Quat BLOCOCORE_API QuatLength(Quat& quat)												{return Quat(XMQuaternionLength(quat.Get()));}
-inline Quat BLOCOCORE_API QuatLengthSq(Quat& quat)											{return Quat(XMQuaternionLengthSq(quat.Get()));}
-inline Quat BLOCOCORE_API QuatInverse(Quat& quat)												{return Quat(XMQuaternionInverse(quat.Get()));}
-inline Quat BLOCOCORE_API QuatMultiply(Quat& quat1, Quat& quat2 )								{return Quat(XMQuaternionMultiply(quat1.Get(), quat2.Get()));}
+inline Quat  QuatRotation(float x, float y, float z)								{return Quat(XMQuaternionRotationRollPitchYaw(x, y, z));}
+inline Quat  QuatRotation(Vec& offset)											{return Quat(XMQuaternionRotationRollPitchYawFromVector(offset));}
+inline Quat  QuatRotationAxis(Vec& rotAxis, float angle)							{return Quat(XMQuaternionRotationAxis(rotAxis.Get(), angle));}
+inline Quat  QuatRotationNormalAxis(Vec& normalAxis, float angle)				{return Quat(XMQuaternionRotationNormal(normalAxis, angle));}
+inline Quat  QuatRotationMatrix(Mat& mat)										{return Quat(XMQuaternionRotationMatrix(mat.Get()));}
+inline Quat  QuatNormalize(Quat& quat)											{return Quat(XMQuaternionNormalize(quat.Get()));}
+inline Quat  QuatNormalizeEst(Quat& quat)										{return Quat(XMQuaternionNormalizeEst(quat.Get()));}
+inline Quat  QuatSlerp(Quat& quat1, Quat& quat2, float t)						{return Quat(XMQuaternionSlerp(quat1, quat2, t));}
+inline Quat  QuatLength(Quat& quat)												{return Quat(XMQuaternionLength(quat.Get()));}
+inline Quat  QuatLengthSq(Quat& quat)											{return Quat(XMQuaternionLengthSq(quat.Get()));}
+inline Quat  QuatInverse(Quat& quat)												{return Quat(XMQuaternionInverse(quat.Get()));}
+inline Quat  QuatMultiply(Quat& quat1, Quat& quat2 )								{return Quat(XMQuaternionMultiply(quat1.Get(), quat2.Get()));}
 
 // Plane
-inline Plane BLOCOCORE_API PlaneFromPoints(Vec& p1, Vec& p2, Vec& p3)								{return Plane(XMPlaneFromPoints(p1.Get(), p2.Get(), p3.Get()));}
-inline Plane BLOCOCORE_API PlaneFromPointNormal(Vec& point, Vec& normal)							{return Plane(XMPlaneFromPointNormal(point.Get(), normal.Get()));}
-inline Vec BLOCOCORE_API	 PlaneDot(Plane& plane, Vec& vec)										{return Vec(XMPlaneDot(plane.Get(), vec.Get()));}
-inline Vec BLOCOCORE_API	 PlaneDotCoord(Plane& plane, Vec& vec)									{return Vec(XMPlaneDotCoord(plane.Get(), vec.Get()));}
-inline Vec BLOCOCORE_API	 PlaneDotNormal(Plane& plane, Vec& vec)									{return Vec(XMPlaneDotNormal(plane.Get(), vec.Get()));}
-inline Vec BLOCOCORE_API	 PlaneIntersectLine(Plane& plane, Vec& p1, Vec& p2)						{return Vec(XMPlaneIntersectLine(plane.Get(), p1.Get(), p2.Get()));}
-inline bool BLOCOCORE_API	 PlaneInside(Plane& plane, Vec& point)									{return ( PlaneDotCoord(plane, point).GetX() >= 0.0f ); }
-inline bool BLOCOCORE_API	 PlaneInside(Plane& plane, Vec& point, float radius)					{return ( PlaneDotCoord(plane, point).GetX() >= -radius );}
-inline void BLOCOCORE_API  PlaneIntersectPlane(Plane& plane1, Plane& plane2, Vec* pP1, Vec* pP2)
+inline Plane  PlaneFromPoints(Vec& p1, Vec& p2, Vec& p3)								{return Plane(XMPlaneFromPoints(p1.Get(), p2.Get(), p3.Get()));}
+inline Plane  PlaneFromPointNormal(Vec& point, Vec& normal)							{return Plane(XMPlaneFromPointNormal(point.Get(), normal.Get()));}
+inline Vec 	 PlaneDot(Plane& plane, Vec& vec)										{return Vec(XMPlaneDot(plane.Get(), vec.Get()));}
+inline Vec 	 PlaneDotCoord(Plane& plane, Vec& vec)									{return Vec(XMPlaneDotCoord(plane.Get(), vec.Get()));}
+inline Vec 	 PlaneDotNormal(Plane& plane, Vec& vec)									{return Vec(XMPlaneDotNormal(plane.Get(), vec.Get()));}
+inline Vec 	 PlaneIntersectLine(Plane& plane, Vec& p1, Vec& p2)						{return Vec(XMPlaneIntersectLine(plane.Get(), p1.Get(), p2.Get()));}
+inline bool 	 PlaneInside(Plane& plane, Vec& point)									{return ( PlaneDotCoord(plane, point).GetX() >= 0.0f ); }
+inline bool 	 PlaneInside(Plane& plane, Vec& point, float radius)					{return ( PlaneDotCoord(plane, point).GetX() >= -radius );}
+inline void   PlaneIntersectPlane(Plane& plane1, Plane& plane2, Vec* pP1, Vec* pP2)
 {
 	XMVECTOR temp1;
 	XMVECTOR temp2;
@@ -724,12 +743,12 @@ inline void BLOCOCORE_API  PlaneIntersectPlane(Plane& plane1, Plane& plane2, Vec
 
 
 // Color
-inline Col BLOCOCORE_API ColAdjustContrast(Col& col, float contrast)							{return Col(XMColorAdjustContrast(col.Get(), contrast));};
-inline Col BLOCOCORE_API ColAdjustSaturation(Col& col, float saturation)						{return Col(XMColorAdjustSaturation(col.Get(), saturation));}
-inline Col BLOCOCORE_API ColModulate(Col& col1, Col& col2)									{return Col(XMColorModulate(col1.Get(), col2.Get()));}
-inline Col BLOCOCORE_API ColNegativ(Col& col)													{return Col(XMColorNegative(col.Get()));}
+inline Col  ColAdjustContrast(Col& col, float contrast)							{return Col(XMColorAdjustContrast(col.Get(), contrast));};
+inline Col  ColAdjustSaturation(Col& col, float saturation)						{return Col(XMColorAdjustSaturation(col.Get(), saturation));}
+inline Col  ColModulate(Col& col1, Col& col2)									{return Col(XMColorModulate(col1.Get(), col2.Get()));}
+inline Col  ColNegativ(Col& col)													{return Col(XMColorNegative(col.Get()));}
 
-inline UINT32 BLOCOCORE_API ColToHex(Col& col)
+inline UINT32  ColToHex(Col& col)
 {
 	UINT color = 0;
 	float arr[4];
@@ -742,7 +761,7 @@ inline UINT32 BLOCOCORE_API ColToHex(Col& col)
 
 	return color;
 }
-inline Col BLOCOCORE_API	HexToCol(UINT32 col)
+inline Col 	HexToCol(UINT32 col)
 {
 	float color[4];
 
@@ -754,11 +773,11 @@ inline Col BLOCOCORE_API	HexToCol(UINT32 col)
 	return Col(color);
 }
 
-inline bool BLOCOCORE_API operator ==(const POINT& lhs, const POINT& rhs)
+inline bool  operator ==(const POINT& lhs, const POINT& rhs)
 {
 	return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
-inline bool BLOCOCORE_API operator !=(const POINT& lhs, const POINT& rhs)
+inline bool  operator !=(const POINT& lhs, const POINT& rhs)
 {
 	return !(lhs == rhs);
 }

@@ -4,7 +4,7 @@
 //
  Frustum::Frustum()
 {
-	m_Fov = D3DX_PI/4.0f;		// default field of view is 90 degrees
+	m_Fov = XM_PI/4.0f;		// default field of view is 90 degrees
 	m_Aspect = 1.0f;			// default aspect ratio is 1:1
 	m_Near = 1.0f;				// default near clip plane is 1m away from the camera
 	m_Far = 1000.0f;				// default near clip plane is 100m away from the camera

@@ -73,19 +73,22 @@ struct AppMsg
 #include <iterator>
 #include <fstream>
 
+#include <BlocoUtility\include\BlocoUtility.h>
 
 // DirectX
-#include "d3dx9.h"
-#pragma comment(lib, "d3dx9.lib")
+//#include "d3dx9.h"
+//#pragma comment(lib, "d3dx9.lib")
 
 // math
 #include <xnamath.h>
 
 // lua
-#include <LuaPlus/LuaLink.h>
-#include <LuaPlus/LuaPlus.h>
-#include <LuaPlus/LuaObject.h>
-#pragma comment(lib, "luaplus51-1201_debug.lib")
+#include <3dParty\luaPlus\include\LuaPlus\LuaLink.h>
+#include <3dParty\luaPlus\include\LuaPlus\LuaPlus.h>
+#include <3dParty\luaPlus\include\LuaPlus\LuaObject.h>
+
+#include <3dParty\FastDeligate\include\FastDelegate.h>
+#include <3dParty\FastDeligate\include\FastDelegateBind.h>
 
 using namespace LuaPlus;
 using namespace std;
@@ -93,14 +96,16 @@ using namespace std;
 #include "Vec.h"
 #include "Geometry.h"
 
-#include "Templates.h"
 #include "Interfaces.h"
+
+#include "ToString.h"
 
 #include "HashedString.h"
 #include "EventManager.h"
 #include "LuaStateManager.h"
 #include "CProcess.h"
 #include "CProcessManager.h"
+
 
 #endif
 

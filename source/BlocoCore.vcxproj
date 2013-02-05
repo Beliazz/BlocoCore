@@ -28,7 +28,7 @@
     <ClInclude Include="HashedString.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="LuaStateManager.h" />
-    <ClInclude Include="Templates.h" />
+    <ClInclude Include="ToString.h" />
     <ClInclude Include="Vec.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -41,6 +41,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -59,10 +60,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(BLOCO_HOME)\luaPlus\LuaPlus\Src;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BLOCO_HOME)\luaPlus\LuaPlus\build2010\bin.vs2010.win32;$(DXSDK_DIR)\Lib\x86;$(LibraryPath)</LibraryPath>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(BLOCO_HOME)\;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <OutDir>Output</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -77,12 +78,18 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(BLOCO_HOME)\BlocoUtility\lib\Debug\BlocoUtility.lib;$(BLOCO_HOME)\3dParty\zlib\lib\Debug\zdll.lib;$(BLOCO_HOME)\3dParty\luaPlus\lib\Debug\luaplus51-1201_debug.lib;$(BLOCO_HOME)\3dParty\TinyXML\lib\Debug\tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>robocopy $(OutDir) $(BLOCO_HOME)\$(ProjectName)\bin\$(Configuration)\ "*.dll" /PURGE
-robocopy $(OutDir) $(BLOCO_HOME)\$(ProjectName)\lib\$(Configuration)\ "*.lib" /PURGE
-robocopy $(ProjectDir) $(BLOCO_HOME)\$(ProjectName)\include "*.h" /PURGE /XD "$(OutDir)"
-</Command>
+      <Command>robocopy $(OutDir) ..\bin\$(Configuration) "*.dll" /PURGE
+robocopy $(OutDir) ..\lib\$(Configuration) "*.lib" /PURGE
+robocopy ..\source  ..\include "*.h" /PURGE
+if errorlevel 4 goto BuildEventFailed
+if errorlevel 0 goto end
+:BuildEventFailed echo FILECOPY for $(ProjectName) FAILED
+exit 1
+:end echo FILECOPY for $(ProjectName) COMPLETED OK
+exit 0</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
